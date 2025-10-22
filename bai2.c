@@ -1,17 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-typedef struct {
-    char id[16];
-    char name[64];
-    char khoa[64];
-} Student;
-
-typedef struct Node {
-    Student data;
-    struct Node* next;
-} Node;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

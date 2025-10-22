@@ -30,7 +30,8 @@ void append(Node** head, int data) {
     Node* newNode = createNode(data);
     if (*head == NULL) {
         *head = newNode;
-    } else {
+    } 
+    else {
         Node* temp = *head;
         while (temp->next != NULL)
             temp = temp->next;
@@ -79,9 +80,10 @@ void deleteTail(Node** head) {
     }
 
     Node* temp = *head;
-    while (temp->next->next != NULL)
+    while (temp->next->next != NULL){
+        printList(temp);
         temp = temp->next;
-        printList(*head);
+    }
     printf("Xóa phần tử cuối có giá trị %d.\n", temp->next->data);
     free(temp->next);
     temp->next = NULL;
@@ -89,27 +91,35 @@ void deleteTail(Node** head) {
 }
 
 void deleteValue(Node** head, int x) {
+    int count = 0;
+    Node* temp = *head;
     if (*head == NULL) {
         printf("Danh sách rỗng. Không thể xóa phần tử có giá trị %d.\n", x);
         return;
     }
+
     if ((*head)->data == x) {
-        printf("Phần tử đầu có giá trị %d. Đang xóa.\n", x);
+        printf("Xóa phần tử đầu có giá trị %d.\n", x);
         deleteHead(head);
-        return;
+        count++;
     }
-    Node* temp = *head;
-    while (temp->next != NULL && temp->next->data != x)
-        printList(*head);
+    while (temp != NULL)
+    {
+        printList(temp);
+        if (temp->next->data == x && temp->next != NULL) {
+            printf("Xóa phần tử có giá trị %d.\n", x);
+            Node* toDelete = temp->next;
+            temp->next = toDelete->next;
+            free(toDelete);
+            count++;
+        } 
         temp = temp->next;
-    if (temp->next != NULL) {
-        printf("Xóa phần tử có giá trị %d.\n", x);
-        Node* toDelete = temp->next;
-        temp->next = toDelete->next;
-        free(toDelete);
-    } 
-    else {
+    }
+    if (count == 0) {
         printf("Không tìm thấy phần tử có giá trị %d để xóa.\n", x);
+    }
+    else {
+        printf("Đã xóa tất cả phần tử có giá trị %d.\n", x);
     }
     printList(*head);
 }
