@@ -69,39 +69,6 @@ DList dll_from_array(int a[], int n) {
 
 }
 int main() {
-    // int a[10];
-    // srand(time(NULL));
-    // for (int i = 0; i < 10; i++) {
-    //     a[i] = rand() % 100;
-    // }
-
-    // printf("Mảng ban đầu:\n");
-    // for (int i = 0; i < 10; i++) {
-    //     printf("%d ", a[i]);
-    // }
-    // printf("\n");
-
-    // DList L = dll_from_array(a, 10);
-
-    // // Xóa các phần tử chẵn
-    // Node *p = L.head;
-    // while (p) {
-    //     Node *next = p->next;
-    //     if (p->key % 2 == 0) {
-    //         dll_remove(&L, p); 
-    //     }
-    //     p = next;
-    // }
-
-    // // Xuất lại mảng
-    // int out[10];
-    // int count = array_from_dll(&L, out, 10);
-    // printf("Mảng sau khi xóa phần tử chẵn:\n");
-    // for (int i = 0; i < count; i++) {
-    //     printf("%d ", out[i]);
-    // }
-    // printf("\n");
-
     int n;
     printf("Nhập n:"); scanf("%d",&n);
     int a[n];
