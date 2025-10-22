@@ -42,6 +42,7 @@ void findValue(Node* head, int x) {
     printf("Tìm phần tử có giá trị %d.\n", x);
     int pos = 0;
     while (head != NULL) {
+        printList(head);
         if (head->data == x) {
             printf("Tìm thấy %d tại vị trí %d.\n", x, pos);
             printList(head);
@@ -59,7 +60,9 @@ void deleteHead(Node** head) {
         return;
     }
     printf("Xóa phần tử đầu tiên có giá trị %d.\n", (*head)->data);
+    Node* temp = *head;
     *head = (*head)->next;
+    free(temp);
     printList(*head);
 }
 void deleteTail(Node** head) {
@@ -78,6 +81,7 @@ void deleteTail(Node** head) {
     Node* temp = *head;
     while (temp->next->next != NULL)
         temp = temp->next;
+        printList(*head);
     printf("Xóa phần tử cuối có giá trị %d.\n", temp->next->data);
     free(temp->next);
     temp->next = NULL;
@@ -96,6 +100,7 @@ void deleteValue(Node** head, int x) {
     }
     Node* temp = *head;
     while (temp->next != NULL && temp->next->data != x)
+        printList(*head);
         temp = temp->next;
     if (temp->next != NULL) {
         printf("Xóa phần tử có giá trị %d.\n", x);
