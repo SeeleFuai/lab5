@@ -1,75 +1,140 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Dnode {
+typedef struct Node {
     int data;
-    struct Dnode* prev;
-    struct Dnode* next;
-} Dnode;
+    struct Node* next;
+} Node;
 
-typedef struct  Dlist {
-    Dnode* head;
-    Dnode* tail;
-} Dlist;
-
-
-
-Dlist* createList() {
-    Dlist* newList = (Dlist*)malloc(sizeof(Dlist));
-    if (!newList) {
-        printf("Memory allocation failed\n");
-        exit(1);
-    }
-    newList->head = NULL;
-    newList->tail = NULL;
-    return newList;
-}
-
-Dnode* createNode(int data) {
-    Dnode* newNode = (Dnode*)malloc(sizeof(Dnode));
-    if (!newNode) {
-        printf("Memory allocation failed\n");
-        exit(1);
-    }
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
-    newNode->prev = NULL;
     newNode->next = NULL;
     return newNode;
 }
 
-void append(Dlist* list, int data) {
-    Dnode* newNode = createNode(data);
-    if (list->tail == NULL) {
-        list->head = newNode;
-        list->tail = newNode;
-    } else {
-        list->tail->next = newNode;
-        newNode->prev = list->tail;
-        list->tail = newNode;
+void printList(Node* head) {
+    printf("Danh sách hiện tại: ");
+    if (head == NULL) {
+        printf("(rỗng)\n");
+        return;
     }
-    free(newNode);
-}
-
-void displayList(Dlist* list) {
-    Dnode* current = list->head;
-    while (current != NULL) {
-        printf("%d ", current->data);
-        current = current->next;
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->next;
     }
     printf("\n");
 }
+void append(Node** head, int data) {
+    printf("Thêm phần tử %d vào danh sách.\n", data);
+    Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* temp = *head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+    printList(*head);
+}
+void findValue(Node* head, int x) {
+    printf("Tìm phần tử có giá trị %d.\n", x);
+    int pos = 0;
+    while (head != NULL) {
+        if (head->data == x) {
+            printf("Tìm thấy %d tại vị trí %d.\n", x, pos);
+            printList(head);
+            return;
+        }
+        head = head->next;
+        pos++;
+    }
+    printf("Không tìm thấy %d trong danh sách.\n", x);
+    printList(head);
+}
+void deleteHead(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sách rỗng.\n");
+        return;
+    }
+    printf("Xóa phần tử đầu tiên có giá trị %d.\n", (*head)->data);
+    *head = (*head)->next;
+    printList(*head);
+}
+void deleteTail(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sách rỗng.\n");
+        return;
+    }
+    if ((*head)->next == NULL) {
+        printf("Xóa phần tử duy nhất có giá trị %d.\n", (*head)->data);
+        free(*head);
+        *head = NULL;
+        printList(*head);
+        return;
+    }
 
-
-int main() {
-    Dlist* Dlist = createList();
-    
-    append(Dlist, 10);
-    append(Dlist, 20);
-    append(Dlist, 30);
-    
-    printf("Doubly Linked List: ");
-    displayList(Dlist);
-    free(Dlist);
-    return 0;
+    Node* temp = *head;
+    while (temp->next->next != NULL)
+        temp = temp->next;
+    printf("Xóa phần tử cuối có giá trị %d.\n", temp->next->data);
+    free(temp->next);
+    temp->next = NULL;
+    printList(*head);
 }
 
+void deleteValue(Node** head, int x) {
+    if (*head == NULL) {
+        printf("Danh sách rỗng. Không thể xóa phần tử có giá trị %d.\n", x);
+        return;
+    }
+    if ((*head)->data == x) {
+        printf("Phần tử đầu có giá trị %d. Đang xóa.\n", x);
+        deleteHead(head);
+        return;
+    }
+    Node* temp = *head;
+    while (temp->next != NULL && temp->next->data != x)
+        temp = temp->next;
+    if (temp->next != NULL) {
+        printf("Xóa phần tử có giá trị %d.\n", x);
+        Node* toDelete = temp->next;
+        temp->next = toDelete->next;
+        free(toDelete);
+    } 
+    else {
+        printf("Không tìm thấy phần tử có giá trị %d để xóa.\n", x);
+    }
+    printList(*head);
+}
+int main() {
+    Node* head = NULL;
+    int n, x;
+
+    printf("Nhập số lượng phần tử: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        int value;
+        printf("Nhập phần tử thứ %d: ", i + 1);
+        scanf("%d", &value);
+        append(&head, value);
+    }
+
+    printf("\nNhập giá trị cần tìm: ");
+    scanf("%d", &x);
+    findValue(head, x);
+
+    printf("\nXóa phần tử đầu:\n");
+    deleteHead(&head);
+
+    printf("\nXóa phần tử cuối:\n");
+    deleteTail(&head);
+
+    printf("\nNhập giá trị cần xóa: ");
+    scanf("%d", &x);
+    deleteValue(&head, x);
+
+    return 0;
+}
