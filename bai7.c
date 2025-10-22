@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
     char sku[20];
@@ -32,17 +33,18 @@ Node* dll_create_node(Item item) {
 void dll_add_item(DList *L, Item item) {
     Node *p = L->head;
     while (p) {
-        if (strcmp(p->data.sku, item.sku) == 0) return; // trùng SKU
+        if (strcmp(p->data.sku, item.sku) == 0) return; 
         p = p->next;
     }
 
     Node *new_node = dll_create_node(item);
-    if (!L->tail) {
+    if (!L->tail) { // danh sách rỗng
         L->head = L->tail = new_node;
-    } else {
-        L->tail->next = new_node;
-        new_node->prev = L->tail;
-        L->tail = new_node;
+    } 
+    else {
+        L->tail->next = new_node; // chèn sau tail
+        new_node->prev = L->tail; // cập nhật prev của nút mới
+        L->tail = new_node; // cập nhật tail
     }
     L->size++;
 }
@@ -142,13 +144,63 @@ void dll_merge_inventory(DList *A, DList *B) {
 void dll_print_inventory(DList *L) {
     Node *p = L->head;
     printf("Current Inventory:\n");
-    printf("--------------------------------------------------\n");
+    printf("---------------------------------------------------------\n");
     printf("| %-10s | %-20s | %-5s | %-10s |\n", "SKU", "Name", "Qty", "Price");
-    printf("--------------------------------------------------\n");
+    printf("---------------------------------------------------------\n");
     while (p) {
         printf("| %-10s | %-20s | %-5d | %-10.2f |\n",
                p->data.sku, p->data.name, p->data.qty, p->data.price);
         p = p->next;
     }
-    printf("--------------------------------------------------\n");
+    printf("---------------------------------------------------------\n");
+}
+
+Item input_item() {
+    Item item;
+    printf("Nhập SKU: ");
+    scanf("%s", item.sku);
+    printf("Nhập tên hàng: ");
+    getchar(); // loại bỏ ký tự '\n' còn lại
+    fgets(item.name, sizeof(item.name), stdin);
+    item.name[strcspn(item.name, "\n")] = '\0'; // xóa '\n' cuối dòng
+    printf("Nhập số lượng: ");
+    scanf("%d", &item.qty);
+    printf("Nhập giá: ");
+    scanf("%lf", &item.price);
+    return item;
+}
+
+
+
+void test_inventory() {
+    DList kho;
+    dll_init(&kho);
+    int n;
+    printf("Nhập n mặt hàng:\n");scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        Item item = input_item();
+        dll_add_item(&kho, item);
+    }
+
+    dll_print_inventory(&kho);
+
+    printf("\nNhập kho cho SKU 1 thêm 10 đơn vị:\n");
+    dll_import_stock(&kho, kho.head->data.sku, 10);
+
+    printf("\nXuất kho SKU 2 5 đơn vị:\n");
+    dll_export_stock(&kho, (kho.head->next)->data.sku, 5);
+
+    printf("\nCập nhật giá 3 thành 99.99:\n");
+    dll_update_price(&kho, (kho.head->next->next)->data.sku, 99.99);
+
+    printf("\nCảnh báo tồn kho (<= 20):\n");
+    dll_low_stock_alert(&kho, 20);
+
+    dll_print_inventory(&kho);
+    printf("\nTổng giá trị tồn kho: %.2f\n", dll_total_inventory_value(&kho));
+}
+
+int main() {
+    test_inventory();
+    return 0;
 }
