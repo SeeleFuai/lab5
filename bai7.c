@@ -129,20 +129,20 @@ double dll_total_inventory_value(DList *L) {
     return total;
 }
 
-void dll_merge_inventory(DList *A, DList *B) {
-    Node *p = B->head;
-    while (p) {
-        Item *existing = dll_find_by_sku(A, p->data.sku);
-        if (existing) {
-            existing->qty += p->data.qty;
-        if (p->data.price > 0) existing->price = p->data.price;
-        } 
-        else {
-            dll_add_item(A, p->data);
-        }
-        p = p->next;
-    }
-}
+// void dll_merge_inventory(DList *A, DList *B) {
+//     Node *p = B->head;
+//     while (p) {
+//         Item *existing = dll_find_by_sku(A, p->data.sku);
+//         if (existing) {
+//             existing->qty += p->data.qty;
+//         if (p->data.price > 0) existing->price = p->data.price;
+//         } 
+//         else {
+//             dll_add_item(A, p->data);
+//         }
+//         p = p->next;
+//     }
+// }
 void dll_print_inventory(DList *L) {
     Node *p = L->head;
     printf("Current Inventory:\n");
