@@ -55,27 +55,14 @@ void printReverse(Dlist* list) {
     printf("\n");
 }
 
-// void AddToHead(Dlist* list, int data) {
-//     printf("Thêm phần tử %d vào đầu danh sách.\n", data);
-//     Dnode* newNode = createDnode(data);
-//     if (list->head == NULL) {
-//         list->head = newNode;
-//         list->tail = newNode;
-//     } else {
-//         newNode->next = list->head;
-//         list->head->prev = newNode;
-//         list->head = newNode;
-//     }
-//     printDlist(list);
-// }
-
 void AddToTail(Dlist* list, int data) {
     printf("Thêm phần tử %d vào cuối danh sách.\n", data);
     Dnode* newNode = createDnode(data);
     if (list->tail == NULL) {
         list->head = newNode;
         list->tail = newNode;
-    } else {
+    } 
+    else {
         newNode->prev = list->tail;
         list->tail->next = newNode;
         list->tail = newNode;
@@ -90,8 +77,8 @@ void DeleteFromHead(Dlist* list) {
     }
     printf("Xóa phần tử đầu: %d\n", list->head->data);
     Dnode* temp = list->head;
-    list->head = list->head->next;
-    if (list->head != NULL) {
+    list->head = list->head->next; //
+    if (list->head != NULL) { 
         list->head->prev = NULL;
     } else {
         list->tail = NULL; // Danh sách trở nên rỗng
@@ -141,15 +128,6 @@ int main() {
     printDlist(list);
     printReverse(list);
     
-    // Giải phóng bộ nhớ
-    Dnode* current = list->head;
-    Dnode* nextNode;
-    while (current != NULL) {
-        nextNode = current->next;
-        free(current);
-        current = nextNode;
-    }
-    free(list);
 
     return 0;
 }

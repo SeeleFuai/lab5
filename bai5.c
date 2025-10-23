@@ -25,10 +25,10 @@ void dll_insert_sorted(DList *L, int key) {
     Node *p = L->head;
     while (p) {
         if (p->key == key) return; // bỏ qua nếu trùng
-        if (p->key > key) break;
+        if (p->key > key) break; 
         p = p->next;
     }
-
+    
     Node *new_node = dll_create_node_int(key);
     if (p==NULL) { // chèn vào cuối
         if (L->tail==NULL) {
@@ -71,9 +71,9 @@ int main() {
     int n = sizeof(a) / sizeof(a[0]);
 
     for (int i = 0; i < n; i++) {
-        dll_insert_sorted(&L, a[i]);
+        dll_insert_sorted(&L, a[i]); 
     }
 
-    printf("DLL:\n");
-    dll_print_forward(&L); 
+    printf("DLL:\n"); 
+    dll_print_forward(&L); //
 }

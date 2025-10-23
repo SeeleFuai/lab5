@@ -40,11 +40,12 @@ void append(Node** head, Student s) {
     Node* newNode = createNode(s);
     if (*head == NULL) {
         *head = newNode;
-    } else {
+    } 
+    else {
         Node* temp = *head;
         while (temp->next != NULL)
             temp = temp->next;
-            printList(*head);
+            printList(temp);
         temp->next = newNode;
     }
     printList(*head);
@@ -106,7 +107,7 @@ void deleteById(Node** head, const char* id) {
         return;
     }
     Node* temp = *head;
-    while (temp->next != NULL && strcmp(temp->next->data.id, id) != 0)
+    while (temp->next != NULL && strcmp(temp->next->data.id, id) != 0) 
         temp = temp->next;
     if (temp->next != NULL) {
         printf("Xóa sinh viên có mã %s\n", id);
