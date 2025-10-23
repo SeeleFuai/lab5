@@ -114,7 +114,9 @@ void deleteValue(Node** head, int x) {
             free(toDelete);
             count++;
         } 
-        temp = temp->next;
+        else {
+            temp = temp->next;
+        }
     }
     if (count == 0) {
         printf("Không tìm thấy phần tử có giá trị %d để xóa.\n", x);
