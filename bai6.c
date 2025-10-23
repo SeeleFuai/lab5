@@ -110,9 +110,8 @@ void dll_find_by_gpa_range(DList *L, float min_gpa, float max_gpa) {
     }
 }
 
-void dll_list_honor_students(DList *L) {
-    dll_find_by_gpa_range(L, 3.2, 4.0);
-}
+
+
 void dll_report(DList *L) {
     int count = 0;
     float sum = 0;
@@ -136,17 +135,24 @@ void dll_report(DList *L) {
 int main() {
     DList L;
     dll_init(&L);
-
-    // Thêm sinh viên
-    Student s1 = {101, "Nguyen Van A", 3.5};
-    Student s2 = {102, "Tran Thi B", 2.8};
-    Student s3 = {103, "Le Van C", 3.9};
-    dll_insert_student(&L, s1);
-    dll_insert_student(&L, s2);
-    dll_insert_student(&L, s3);
-
+    int n;
+    printf("Nhập số sinh viên ban đầu: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        Student s;
+        printf("Nhập thông tin sinh viên %d:\n", i + 1);
+        printf("ID: ");
+        scanf("%d", &s.id);
+        printf("Name: ");
+        getchar(); // loại bỏ ký tự '\n' còn lại
+        fgets(s.name, sizeof(s.name), stdin);
+        s.name[strcspn(s.name, "\n")] = '\0'; // xóa '\n' cuối dòng
+        printf("GPA: ");
+        scanf("%f", &s.gpa);
+        dll_insert_student(&L, s);
+    }
     // Cập nhật sinh viên
-    dll_update_student(&L, 102, "Tran Thi B Updated", 3.1);
+    dll_update_student(&L, 102, "Tran Thi B", 3.1);
 
     // Xóa sinh viên
     dll_remove_by_id(&L, 101);
@@ -161,7 +167,7 @@ int main() {
 
     // Liệt kê sinh viên có GPA từ 3.2 đến 4.0
     printf("Danh sách SV có GPA từ 3.2 đến 4.0:\n");
-    dll_list_honor_students(&L);
+    dll_find_by_gpa_range(L, 3.2, 4.0);
 
     // Báo cáo thống kê
     printf("Báo cáo thống kê:\n");
