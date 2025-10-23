@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
 typedef struct Node {
     int key;
     struct Node *prev, *next;

@@ -98,11 +98,13 @@ void deleteValue(Node** head, int x) {
         return;
     }
 
-    if ((*head)->data == x) {
+    while (*head != NULL && (*head)->data == x) {
         printf("Xóa phần tử đầu có giá trị %d.\n", x);
         deleteHead(head);
+        temp = *head;
         count++;
-    }
+    }   
+
     while (temp != NULL && temp->next != NULL)
     {
         printList(temp);

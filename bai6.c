@@ -145,7 +145,8 @@ int main() {
         scanf("%d", &s.id);
         printf("Name: ");
         getchar(); // loại bỏ ký tự '\n' còn lại
-        fgets(s.name, sizeof(s.name), stdin);
+        fgets(s.name, sizeof(s.name), stdin); 
+
         s.name[strcspn(s.name, "\n")] = '\0'; // xóa '\n' cuối dòng
         printf("GPA: ");
         scanf("%f", &s.gpa);
@@ -168,7 +169,7 @@ int main() {
 
     // Liệt kê sinh viên có GPA từ 3.2 đến 4.0
     printf("Danh sách SV có GPA từ 3.2 đến 4.0:\n");
-    dll_find_by_gpa_range(L, 3.2, 4.0);
+    dll_find_by_gpa_range(&L, 3.2, 4.0);
 
     // Báo cáo thống kê
     printf("Báo cáo thống kê:\n");

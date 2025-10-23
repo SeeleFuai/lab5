@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 typedef struct {
     int exp;       // số mũ
     double coef;   // hệ số
@@ -58,14 +58,14 @@ void poly_add_term(Poly *P, Term t) {
 Poly poly_add(Poly *A, Poly *B) {
     Poly C;
     poly_init(&C);
-    Node *p = A->head, *q = B->head;
+    Node *p = A->head;
     while (p) {
-        poly_insert_term(&C, p->data);
+        poly_add_term(&C, p->data);
         p = p->next;
     }
+    Node *q = B->head;
     while (q) {
-        Term t = q->data;
-        poly_insert_term(&C, t);
+        poly_add_term(&C, q->data);
         q = q->next;
     }
     return C;
@@ -107,33 +107,77 @@ Poly poly_minus(Poly *A, Poly *B) {
     return C;
 }
 
+void poly_print(Poly *P) {
+    Node *p = P->head;
+    if (!p) {
+        printf("0\n");
+        return;
+    }
+    while (p) {
+        if (p != P->head && p->data.coef >= 0)
+            printf(" + ");
+        else if (p->data.coef < 0)
+            printf(" - ");
+        
+        double abs_coef = p->data.coef < 0 ? -p->data.coef : p->data.coef;
+
+        if (p->data.exp == 0)
+            printf("%.2f", abs_coef);
+        else if (p->data.exp == 1)
+            printf("%.2fx", abs_coef);
+        else
+            printf("%.2fx^%d", abs_coef, p->data.exp);
+        
+        p = p->next;
+    }
+    printf("\n");
+}
+double poly_eval(Poly *P, double x) {
+    double result = 0;
+    Node *p = P->head;
+    while (p) {
+        result += p->data.coef * pow(x, p->data.exp);
+        p = p->next;
+    }
+    return result;
+}
+
+
 void test_poly() {
     Poly A, B;
     poly_init(&A);
     poly_init(&B);
 
-    poly_insert_term(&A, (Term){4, 3});
-    poly_insert_term(&A, (Term){2, 2});
-    poly_insert_term(&A, (Term){0, -5});
+    // Tạo đa thức A: 3x^4 + 2x^2 + 1
+    poly_add_term(&A, (Term){4, 3});
+    poly_add_term(&A, (Term){2, 2});
+    poly_add_term(&A, (Term){0, 1});
 
-    poly_insert_term(&B, (Term){3, -1});
-    poly_insert_term(&B, (Term){2, 2});
-    poly_insert_term(&B, (Term){0, 1});
+    // Tạo đa thức B: 5x^3 + 4x + 2
+    poly_add_term(&B, (Term){3, 5});
+    poly_add_term(&B, (Term){1, 4});
+    poly_add_term(&B, (Term){0, 2});
 
-    printf("A(x) = "); poly_print(&A);
-    printf("B(x) = "); poly_print(&B);
+    printf("Đa thức A: ");
+    poly_print(&A);
+    printf("Đa thức B: ");
+    poly_print(&B);
 
-    Poly C1 = poly_add(&A, &B);
-    printf("A + B = "); poly_print(&C1);
+    Poly C = poly_add(&A, &B);
+    printf("A + B = ");
+    poly_print(&C);
 
-    Poly C2 = poly_sub(&A, &B);
-    printf("A - B = "); poly_print(&C2);
+    Poly D = poly_multiply(&A, &B);
+    printf("A * B = ");
+    poly_print(&D);
 
-    Poly C3 = poly_mul(&A, &B);
-    printf("A * B = "); poly_print(&C3);
+    Poly E = poly_minus(&A, &B);
+    printf("A - B = ");
+    poly_print(&E);
 
-    double val = poly_eval(&A, 2);
-    printf("A(2) = %.2f\n", val);
+    double x = 2.0;
+    printf("Giá trị của A tại x = %.2f: %.2f\n", x, poly_eval(&A, x));
+    printf("Giá trị của B tại x = %.2f: %.2f\n", x, poly_eval(&B, x));
 }
 
 int main() {
