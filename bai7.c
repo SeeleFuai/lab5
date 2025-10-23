@@ -48,6 +48,7 @@ void dll_add_item(DList *L, Item item) {
     }
     L->size++;
 }
+
 int dll_import_stock(DList *L, const char *sku, int amount) {
     Node *p = L->head;
     while (p) {
@@ -98,14 +99,14 @@ Item* dll_find_by_sku(DList *L, const char *sku) {
 
 void dll_search_by_name(DList *L, const char *keyword) {
     Node *p = L->head;
-    while (p) {
+    while (p) 
         if (strstr(p->data.name, keyword)) {
             printf("SKU: %s | Name: %s | Qty: %d | Price: %.2f\n",
                    p->data.sku, p->data.name, p->data.qty, p->data.price);
         }
         p = p->next;
     }
-}
+
 
 void dll_low_stock_alert(DList *L, int reorder_level) {
     Node *p = L->head;
@@ -134,8 +135,9 @@ void dll_merge_inventory(DList *A, DList *B) {
         Item *existing = dll_find_by_sku(A, p->data.sku);
         if (existing) {
             existing->qty += p->data.qty;
-            if (p->data.price > 0) existing->price = p->data.price;
-        } else {
+        if (p->data.price > 0) existing->price = p->data.price;
+        } 
+        else {
             dll_add_item(A, p->data);
         }
         p = p->next;
@@ -172,7 +174,7 @@ Item input_item() {
 
 
 
-void test_inventory() {
+int main() {
     DList kho;
     dll_init(&kho);
     int n;
@@ -198,9 +200,6 @@ void test_inventory() {
 
     dll_print_inventory(&kho);
     printf("\nTổng giá trị tồn kho: %.2f\n", dll_total_inventory_value(&kho));
-}
-
-int main() {
-    test_inventory();
     return 0;
 }
+

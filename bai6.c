@@ -152,10 +152,11 @@ int main() {
         dll_insert_student(&L, s);
     }
     // Cập nhật sinh viên
-    dll_update_student(&L, 102, "Tran Thi B", 3.1);
+
+    dll_update_student(&L, 0220, "NguyenTungAnh", 3.7);
 
     // Xóa sinh viên
-    dll_remove_by_id(&L, 101);
+    dll_remove_by_id(&L, 0220);
 
     // Tìm kiếm sinh viên theo ID
     Student *found = dll_find_by_id(&L, 103);
